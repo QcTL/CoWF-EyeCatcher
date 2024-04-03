@@ -51,6 +51,8 @@
             // Listen for list updates
             socket.on('list_updated', (eye) => {
                 // Replace placeholders with actual values
+                console.log("TIME TO UPDATE");
+                console.log(eye);
                 const template = `
             <div class="cComp_elemEye">
                 <div class="cText_EyeTitle">${eye[1].eTitle}</div>
@@ -60,12 +62,12 @@
                         <span class="cText_Accent">${eye[1].eName}</span>
                     </div>
                     <div class="cComp_elemEye_bottom_buttons">
-                        <button class="btn btn-primary">
-                            <i class="bi bi-cloud-arrow-down"></i>
-                        </button>
-                        <button onclick="rLinkEyeGraph(${eye[0]})" class="btn btn-secondary">
-                            <i class="bi bi-arrow-right-short"></i>
-                        </button>
+                    <button onclick="rDownloadEyeGraph('${eye[0]}')" class="btn btn-primary">
+                        <i class="bi bi-cloud-arrow-down"></i>
+                    </button>
+                    <button onclick="rLinkEyeGraph('${eye[0]}')" class="btn btn-secondary">
+                        <i class="bi bi-arrow-right-short"></i>
+                    </button>
                     </div>
                 </div>
             </div>

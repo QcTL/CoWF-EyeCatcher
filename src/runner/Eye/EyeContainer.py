@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from . import Eye
 
 
@@ -12,7 +14,11 @@ class EyeContainer:
     def getUniqueEye(self, uuidEye: str) -> tuple[str, Eye]:
         return uuidEye, self._mEyes[uuidEye]
 
-    def addNewEye(self, uuidEye: str, eye: Eye, dNewValue: float):
+    def addNewEye(self, uuidEye: str, eye: Eye, dNewValue: float) -> bool:
+        bNew = False
         if uuidEye not in self._mEyes:
             self._mEyes[uuidEye] = eye
+            bNew = True
         self._mEyes[uuidEye].addNewValue(dNewValue)
+        self._mEyes[uuidEye].eLast = datetime.now().strftime("%d/%m %H:%M")
+        return bNew

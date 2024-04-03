@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from flask import Flask, render_template, Response
 from flask_socketio import SocketIO
 
+from src.runner.Eye.Eye import Eye
 from src.runner.Eye.EyeContainer import EyeContainer
 
 
@@ -15,6 +16,11 @@ class AppWebEye:
         self._socketio = SocketIO(self._app)
 
         self._register_routes()
+
+    def updateList(self, uuid, eye: Eye):
+        print("UPDATED")
+        print((uuid, eye))
+        self._socketio.emit('list_updated', [uuid, eye.to_dict()])
 
     def _register_routes(self):
         @self._app.route('/')

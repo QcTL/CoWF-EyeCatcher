@@ -1,6 +1,7 @@
 import socket
 import struct
 import threading
+from datetime import datetime
 
 from src.runner.Eye.Eye import Eye
 from src.runner.Eye.EyeContainer import EyeContainer
@@ -11,8 +12,8 @@ class EyeCatcher:
 
     def __init__(self):
         self._EyeContainer: EyeContainer = EyeContainer()
-        self._EyeContainer.addNewEye("tTest", Eye("Paco", "Mendez", "12/12", "12/12"), 0)
-        self._EyeContainer.addNewEye("tTest", Eye("Paco", "Mendez", "12/12", "12/12"), 1)
+        self._EyeContainer.addNewEye("tTest", Eye("Paco", "Mendez", "12/12"), 0)
+        self._EyeContainer.addNewEye("tTest", Eye("Paco", "Mendez", "12/12"), 1)
         self._appWeb: AppWebEye = AppWebEye(self._EyeContainer)
 
     def start(self):
@@ -30,15 +31,16 @@ class EyeCatcher:
                 print("Connection closed by the server")
                 break
             # Unpack the float value (first 4 bytes)
-            float_value = struct.unpack('f', data[:4])[0]
+            int_value = struct.unpack('i', data[:4])[0]
 
             # Decode the string (remaining 32 bytes)
-            received_string = data[4:].decode('utf-8').rstrip()  # Remove trailing spaces
-            self._EyeContainer.addNewEye(received_string,
-                                         Eye(received_string.split('#')[0], received_string.split('#')[1],
-                                             "12/12 12:20", "12/12 12:20"), float_value)
-            #Todo fer que canvii sol
+            received_string = data[4:].decode('utf-8', errors='ignore').rstrip()
 
-            # Process the complete packet
-            print("Received float value:", float_value)
-            print("Received string:", received_string)
+            fDateNow = datetime.now().strftime("%d/%m %H:%M")
+            isNew = self._EyeContainer.addNewEye(received_string,
+                                                 Eye(received_string.split('-')[0], received_string.split('-')[1],
+                                                     fDateNow), int_value)
+            if isNew:
+                self._appWeb.updateList(received_string,
+                                        Eye(received_string.split('-')[0], received_string.split('-')[1],
+                                            fDateNow))
