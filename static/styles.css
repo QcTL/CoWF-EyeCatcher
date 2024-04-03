@@ -1,0 +1,90 @@
+body{
+    background-color: #161616;
+}
+
+
+.cText_Header{
+    font-family: "Poppins", sans-serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #f5f5f5;
+}
+
+.cText_SubHeader{
+    font-family: "Poppins", sans-serif;
+    font-size: 1.5em;
+    font-style: italic;
+    color: #f5f5f5;
+    margin-bottom: 15px;
+}
+
+.cText_Accent{
+    color: #5C45FD;
+    font-weight: bold;
+}
+
+.cText_EyeTitle{
+    font-family: "Poppins", sans-serif;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #f5f5f5;
+}
+
+.cText_EyeDate{
+    font-family: "Poppins", sans-serif;
+    font-size: 1.25em;
+    font-style: italic;
+    color: #969799;
+}
+
+#comp_total{
+    margin: 20px;
+    padding: 20px;
+    background-color: #222222;
+    border-radius: 10px;
+}
+
+#comp_listActive{
+    margin-top: 50px;
+}
+
+.cComp_elemEye_bottom{
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    background: none;
+    border: 3px solid #f5f5f5;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #f5f5f5;
+}
+
+.btn:hover {
+    background-color: #f5f5f5;
+    color: grey;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+i {
+    font-size: 24px;
+}
+
+.cComp_elemEye{
+    border-radius: 10px;
+    background-color: #161616;
+    padding: 15px;
+    max-width: 700px;
+    margin-bottom: 20px;
+}
+
+.right_header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cComp_image{
+    width: 1200px;
+    height: 600px;
+}
