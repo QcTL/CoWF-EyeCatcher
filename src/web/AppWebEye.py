@@ -23,33 +23,8 @@ class AppWebEye:
         self._socketio.emit('list_updated', [uuid, eye.to_dict()])
 
     def updateGraf(self, uuid, eye: Eye):
-        print("UPDATED GRAPH")
         selEye = self._eyeContainer.getUniqueEye(uuid)
-
-        fig, ax = plt.subplots(figsize=(12, 6), dpi=100)
-        ax.plot(selEye[1].eTimes, selEye[1].eValues)
-        ax.set_xlabel('Time', color='white')
-        ax.set_ylabel(selEye[1].eName, color='white')
-        ax.set_title('')
-
-        ax.spines['bottom'].set_color('white')
-        ax.spines['left'].set_color('white')
-
-        ax.spines['top'].set_alpha(0)
-        ax.spines['right'].set_alpha(0)
-
-        ax.set_xticks([])
-        ax.tick_params(axis='y', colors='white')
-
-        fig.patch.set_alpha(0)
-        ax.patch.set_alpha(0)
-
-        img = BytesIO()
-        plt.savefig(img, format='png', transparent=True)
-        img.seek(0)
-        img_base64 = base64.b64encode(img.getvalue()).decode()
-
-        # Emit the updated image data and eye information
+        img_base64 = self._getGraphGivenEye(selEye)
         self._socketio.emit('graph_updated', [uuid, img_base64])
 
     def _register_routes(self):
@@ -61,33 +36,8 @@ class AppWebEye:
         @self._app.route('/eye/<eye_id>')
         def endpointEye(eye_id):
             selEye = self._eyeContainer.getUniqueEye(eye_id)
-
-            fig, ax = plt.subplots(figsize=(12, 6), dpi=100)  # Set custom width (8 inches) and height (6 inches)
-            ax.plot(selEye[1].eTimes, selEye[1].eValues)
-            ax.set_xlabel('Time', color='white')
-            ax.set_ylabel(selEye[1].eName, color='white')
-            ax.set_title('')
-
-            ax.spines['bottom'].set_color('white')  # X-axis
-            ax.spines['left'].set_color('white')  # Y-axis
-
-            ax.spines['top'].set_alpha(0)  # X-axis
-            ax.spines['right'].set_alpha(0)  # Y-axis
-
-            ax.set_xticks([])
-            ax.tick_params(axis='y', colors='white')  # Y-axis tick labels
-
-            # Set the background color to transparent
-            fig.patch.set_alpha(0)  # Set the figure background to fully transparent
-            ax.patch.set_alpha(0)  # Set the axes background to fully transparent
-
-            # Save the figure to a BytesIO object
-            img = BytesIO()
-            plt.savefig(img, format='png', transparent=True)
-            img.seek(0)
-
             # Encode the image as base64
-            img_base64 = base64.b64encode(img.getvalue()).decode()
+            img_base64 = self._getGraphGivenEye(selEye)
             return render_template('p_graphEye.html', img_base64=img_base64,
                                    eye=selEye)
 
@@ -102,6 +52,30 @@ class AppWebEye:
                 mimetype="text/csv",
                 headers={"Content-disposition": f"attachment; filename={selEye[0]}.csv"}
             )
+
+    def _getGraphGivenEye(self, selEye):
+        fig, ax = plt.subplots(figsize=(12, 6), dpi=100)
+        ax.plot(selEye[1].eTimes, selEye[1].eValues)
+        ax.set_xlabel('Time', color='white')
+        ax.set_ylabel(selEye[1].eName, color='white')
+        ax.set_title('')
+
+        ax.spines['bottom'].set_color('white')
+        ax.spines['left'].set_color('white')
+
+        ax.spines['top'].set_alpha(0)
+        ax.spines['right'].set_alpha(0)
+
+        ax.set_xticks([])
+        ax.tick_params(axis='y', colors='white')
+        fig.patch.set_alpha(0)
+        ax.patch.set_alpha(0)
+
+        img = BytesIO()
+        plt.savefig(img, format='png', transparent=True)
+        img.seek(0)
+
+        return base64.b64encode(img.getvalue()).decode()
 
     def addNewInfo(self, llNewValues):
         for i in llNewValues:
