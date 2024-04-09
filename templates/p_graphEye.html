@@ -22,7 +22,7 @@
         {{eye[1].eName}}</span></div>
     <div class="cText_EyeDate right_header">Last Update: {{eye[1].eLast}}</div>
 
-    <img class="cComp_image" src="data:image/png;base64,{{ img_base64 }}" alt="Matplotlib Plot">
+    <img id="cComp_image" src="data:image/png;base64,{{ img_base64 }}" alt="Matplotlib Plot">
 
     <div class="cComp_graph_bottom_buttons right_header">
         <button onclick="rDownloadEyeGraph()" class="btn btn-primary">
@@ -34,6 +34,21 @@
         function rDownloadEyeGraph() {
             window.location.href = '/download_csv/{{eye[0]}}';
         }
+        var socket = io.connect();
+
+        // Store the current eye ID when the page loads
+        var currentEyeId = "{{ eye[0] }}"; // Assuming eye[0] contains the eye ID
+
+        socket.on('graph_updated', function(data) {
+            // Check if the updated eye's ID matches the current eye's ID
+            if (data[0] === currentEyeId) {
+                // Get the img element by id
+                var imgElement = document.getElementById('cComp_image');
+
+                // Update the src attribute with the new base64 encoded image
+                imgElement.src = 'data:image/png;base64,' + data[1];
+            }
+        });
     </script>
 </div>
 </body>

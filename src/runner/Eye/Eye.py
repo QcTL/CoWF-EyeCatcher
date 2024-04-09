@@ -5,6 +5,7 @@ class Eye:
         self.eDate = eDate
         self.eLast = eDate
         self.eValues = []
+        self.eTimes = []
 
     def to_dict(self):
         return {
@@ -13,7 +14,9 @@ class Eye:
             "eName": self.eName,
             "eLast": self.eLast,
             "eValues": self.eValues,
+            "eTimes": self.eTimes,
         }
 
-    def addNewValue(self, dNewValue: float):
+    def addNewValue(self, dNewValue: float, dTimeValue: int):
         self.eValues.append(dNewValue)
+        self.eTimes.append(dTimeValue)

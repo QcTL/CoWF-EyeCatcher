@@ -22,6 +22,36 @@ class AppWebEye:
         print((uuid, eye))
         self._socketio.emit('list_updated', [uuid, eye.to_dict()])
 
+    def updateGraf(self, uuid, eye: Eye):
+        print("UPDATED GRAPH")
+        selEye = self._eyeContainer.getUniqueEye(uuid)
+
+        fig, ax = plt.subplots(figsize=(12, 6), dpi=100)
+        ax.plot(selEye[1].eTimes, selEye[1].eValues)
+        ax.set_xlabel('Time', color='white')
+        ax.set_ylabel(selEye[1].eName, color='white')
+        ax.set_title('')
+
+        ax.spines['bottom'].set_color('white')
+        ax.spines['left'].set_color('white')
+
+        ax.spines['top'].set_alpha(0)
+        ax.spines['right'].set_alpha(0)
+
+        ax.set_xticks([])
+        ax.tick_params(axis='y', colors='white')
+
+        fig.patch.set_alpha(0)
+        ax.patch.set_alpha(0)
+
+        img = BytesIO()
+        plt.savefig(img, format='png', transparent=True)
+        img.seek(0)
+        img_base64 = base64.b64encode(img.getvalue()).decode()
+
+        # Emit the updated image data and eye information
+        self._socketio.emit('graph_updated', [uuid, img_base64])
+
     def _register_routes(self):
         @self._app.route('/')
         @self._app.route('/home')
@@ -33,7 +63,7 @@ class AppWebEye:
             selEye = self._eyeContainer.getUniqueEye(eye_id)
 
             fig, ax = plt.subplots(figsize=(12, 6), dpi=100)  # Set custom width (8 inches) and height (6 inches)
-            ax.plot([i for i in range(0, len(selEye[1].eValues))], selEye[1].eValues)
+            ax.plot(selEye[1].eTimes, selEye[1].eValues)
             ax.set_xlabel('Time', color='white')
             ax.set_ylabel(selEye[1].eName, color='white')
             ax.set_title('')
