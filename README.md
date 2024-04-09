@@ -1,6 +1,8 @@
 # EyeCatcher
 > This is a subproject for the CoWF, its completly required to run this project.
 
+![swappy-20240409_194925](https://github.com/QcTL/CoWF-EyeCatcher/assets/71326643/e8b4cbd9-df04-4480-b6ae-b3a418c7bc6a)
+
 This projects aims to create a Web interface to see the obsererd variables over the CoWF project. Once added in the web program, the
 user can observe the graf and its progretions since it was added. The user can also dowload a .CSV file showing the values
 and the timestaps of any of the recoreded variables.
