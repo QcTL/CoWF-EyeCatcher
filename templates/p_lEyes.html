@@ -48,11 +48,7 @@
             }
 
             const socket = io.connect();
-            // Listen for list updates
             socket.on('list_updated', (eye) => {
-                // Replace placeholders with actual values
-                console.log("TIME TO UPDATE");
-                console.log(eye);
                 const template = `
             <div class="cComp_elemEye">
                 <div class="cText_EyeTitle">${eye[1].eTitle}</div>
